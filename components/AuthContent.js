@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 
-import FlatButton from '../ui/FlatButton';
+import FlatButton from './FlatButton';
 import AuthForm from './AuthForm';
-import { Colors } from '../../constants/styles';
+import { Colors } from '../constants/styles';
 
 export default function AuthContent({ isLogin, onAuthenticate }) {
   //seteo las credenciales como falsas
@@ -43,7 +43,7 @@ export default function AuthContent({ isLogin, onAuthenticate }) {
       });
       return;
     }
-    
+
     onAuthenticate({ email, password });
   }
 
