@@ -6,7 +6,6 @@ import AuthForm from './AuthForm';
 import { Colors } from '../../constants/styles';
 
 export default function AuthContent({ isLogin, onAuthenticate }) {
-
   //seteo las credenciales como falsas
   const [credentialsInvalid, setCredentialsInvalid] = useState({
     email: false,
@@ -15,14 +14,12 @@ export default function AuthContent({ isLogin, onAuthenticate }) {
     confirmPassword: false,
   });
 
-  
   function switchAuthModeHandler() {
     // Todo
   }
 
   function submitHandler(credentials) {
-    let { email, confirmEmail, password, confirmPassword } = credentials; //objeto copia
-
+    let { email, confirmEmail, password, confirmPassword } = credentials; //extraer los campos pasados a la funcion
     email = email.trim();
     password = password.trim();
 
@@ -32,15 +29,38 @@ export default function AuthContent({ isLogin, onAuthenticate }) {
     const emailsAreEqual = email === confirmEmail;
     const passwordsAreEqual = password === confirmPassword;
 
-
-
-
+    if (
+      !emailIsValid ||
+      !passwordIsValid ||
+      (!isLogin && (!emailsAreEqual || !passwordsAreEqual))
+    ) {
+      Alert.alert('Invalid input', 'Please check your entered credentials.');
+      setCredentialsInvalid({
+        email: !emailIsValid,
+        confirmEmail: !emailIsValid || !emailsAreEqual,
+        password: !passwordIsValid,
+        confirmPassword: !passwordIsValid || !passwordsAreEqual,
+      });
+      return;
+    }
+    
+    onAuthenticate({ email, password });
   }
 
-  return <View>
-
-
-  </View>;
+  return (
+    <View style={styles.authContent}>
+      <AuthForm
+        isLogin={isLogin}
+        onSubmit={submitHandler}
+        credentialsInvalid={credentialsInvalid}
+      />
+      <View style={styles.buttons}>
+        <FlatButton onPress={switchAuthModeHandler}>
+          {isLogin ? 'Create a new user' : 'Log in instead'}
+        </FlatButton>
+      </View>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
